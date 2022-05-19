@@ -114,10 +114,10 @@ ExportScript.ConfigEveryFrameArguments =
 -- INSTRUMENTS -------------------------------------------
 
 -- Display Settings
-	--[224] = "%.4f",	--Drum X000
-	--[225] = "%.4f",	--Drum 0X00
-	--[226] = "%.4f",	--Drum 00X0
-	--[227] = "%.4f",	--Drum 000X
+	--[224] = "%.1f",	--Drum X000
+	--[225] = "%.1f",	--Drum 0X00
+	--[226] = "%.1f",	--Drum 00X0
+	--[227] = "%.1f",	--Drum 000X
 
 -- AUTOPILOT ALTITUDE SELECTOR: Adjust autopilot altitude hold value.
 	--[299] = "%.4f",	--Alt Drum X00
@@ -597,7 +597,7 @@ ExportScript.ConfigArguments =
 	[430] = "%.1f",	--UHF SIL Switch
 	[431] = "%.1f",	--UHF E-A2 Switch
 	[432] = "%.1f",	--UHF CDE Switch
-	[433] = "%.1f",	--UHF Mode Switch
+	[433] = "%.3f",	--UHF Mode Switch
 	[434] = "%.1f",	--UHF TEST Switch
 	[435] = "%.1f",	--UHF Knob
 	[437] = "%.1f",	--U/VHF TEST Switch
@@ -612,11 +612,13 @@ ExportScript.ConfigArguments =
 	[446] = "%.1f",	--U/VHF Mode Switch 1
 	[447] = "%.1f",	--U/VHF Power 5W/25W Switch
 	[448] = "%.1f",	--U/VHF Manual/Preset
+	[950] = "%.1f",	--U/VHF Mode
+
 
 -- Navigational Antennas
 	[616] = "%.1f",	--VOR/ILS Frequency Change Whole
 	[617] = "%.1f",	--VOR/ILS Power Dial
-	[618] = "%.1f",	--VOR/ILS Frequency Change Decimal
+	[618] = "%.2f",	--VOR/ILS Frequency Change Decimal
 	[619] = "%.1f",	--VOR/ILS Test Dial
 
 -- TACAN
@@ -637,6 +639,12 @@ ExportScript.ConfigArguments =
 	[459] = "%.1f",	--Anti-Skid Switch
 	[666] = "%.1f",	--Parking Brake Lever
 	[807] = "%.1f",	--Nose Wheel Steering / IFF
+
+	-- TAF-JVN
+	[968] = "%.2f",	--EVF Channel selector
+	[970] = "%.2f",	--EVF Panel Test
+	[672] = "%.1f",	--NVG lights Filter Switch
+
 
 -- Sound Panel
 	[700] = "%.1f",	--AMPLIS Selector
@@ -674,40 +682,6 @@ ExportScript.ConfigArguments =
 	[637] = "%.1f",	--ECS Temperature Select Knob {-1.0,1.0} in 0.1 steps
 	[638] = "%.1f",	--ECS Defog Switch
 
-  -- Radio Panel VHF
-  [950] = "%.1f", -- VHF MODE(-0.1, 0, 0.6)
-  [950] = "%.1f", -- VHF MODE(0.1, 0, 0.6)
-  [951] = "%.2f", -- VHF CH Sel(-0.05, 0, 0.95)
-  [951] = "%.2f", -- VHF CH Sel(0.05, 0, 0.95)
-  [952] = "%1d", -- VHF MEM/CLR(1, 0, 1)
-  [953] = "%1d", -- VHF VLD/XFR(1, 0, 1)
-  [954] = "%1d", -- VHF 1/READ(1, 0, 1)
-  [955] = "%1d", -- VHF 2/SQL(1, 0, 1)
-  [956] = "%1d", -- VHF 3/GR(1, 0, 1)
-  [957] = "%1d", -- VHF 4(1, 0, 1)
-  [958] = "%1d", -- VHF 5/20/LOW(1, 0, 1)
-  [959] = "%1d", -- VHF 6/TONE(1, 0, 1)
-  [960] = "%1d", -- VHF 7(1, 0, 1)
-  [961] = "%1d", -- VHF 8/TOD(1, 0, 1)
-  [962] = "%1d", -- VHF 9/ZERO(1, 0, 1)
-  [963] = "%1d", -- VHF 0(1, 0, 1)
-  [964] = "%1d", -- VHF CONF(1, 0, 1)
-
-  -- Radio U/VHF Lights
-  [965] = "%.1f", -- CLR/VLD Display
-  [966] = "%.4f", -- ?
-  [967] = "%.4f", -- ?
-  [968] = "%.4f", -- ?
-  [969] = "%.1f", -- CONF Display
-  [970] = "%.4f", -- ?
-  [971] = "%.4f", -- ?
-  [972] = "%.1f", -- LED SQL Display
-  [973] = "%.4f", -- ?
-  [974] = "%.4f", -- LED GR Display
-  [975] = "%.4f", -- ?
-  [976] = "%.4f", -- ?
-  [977] = "%.4f", -- ?
-  [978] = "%.4f", -- ?
 }
 
 -----------------------------
@@ -835,11 +809,10 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 			if (from2 ~= nill) then
 				to1, to2 = lPCAUR:find("%c", from2+2)
 				if (to1 ~= nil) then
-          tmpStr = lPCAUR:sub(from2+1, to1-1)
-          if (tmpStr:sub(2,2) == '-') then
+					lPCA_UR[lIndex] = lPCAUR:sub(from2+1, to1-1)
+          if (lPCA_UR[lIndex]:len() > 3) then
+            -- ExportScript.Tools.WriteToLog("cleanup UR "..string.format("%s", lPCA_UR[lIndex]))
             lPCA_UR[lIndex] = ""
-          else
-            lPCA_UR[lIndex] = tmpStr
           end
 				end
 			end
@@ -876,11 +849,10 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 			if (from2 ~= nill) then
 				to1, to2 = lPCABR:find("%c", from2+2)
 				if (to1 ~= nil) then
-          tmpStr = lPCABR:sub(from2+1, to1-1)
-          if (tmpStr:sub(2,2) == '-') then
+					lPCA_BR[lIndex] = lPCABR:sub(from2+1, to1-1)
+          if (lPCA_BR[lIndex]:len() > 3) then
+            -- ExportScript.Tools.WriteToLog("cleanup BR "..string.format("%s", lPCA_BR[lIndex]))
             lPCA_BR[lIndex] = ""
-          else
-            lPCA_BR[lIndex] = tmpStr
           end
 				end
 			end
