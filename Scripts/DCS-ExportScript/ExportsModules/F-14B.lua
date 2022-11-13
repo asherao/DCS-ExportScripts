@@ -817,8 +817,8 @@ ExportScript.ConfigEveryFrameArguments =
 [2115]  =  "%.1f",   --      --RIO Stdby ADI Twist 
 [2116]  =  "%.1f",   --      --RIO Stdby ADI pullout 
 
-[8114]  =  "%.1f",   --      ENVIRO_PilotOxygenOn 
-[119]  =  "%.1f",   --  ENVIRO_RIOOxygenOn 
+[8114]  =  "%1d",   --      ENVIRO_PilotOxygenOn 
+[119]  =  "%1d",   --  ENVIRO_RIOOxygenOn 
 [939]  =  "%.1f",   --  ENVIRO_CabinPressureDump 
 [929]  =  "%.1f",   --  ENVIRO_AirSourceRam 
 [933]  =  "%.1f",   --  ENVIRO_AirSourceOff 
