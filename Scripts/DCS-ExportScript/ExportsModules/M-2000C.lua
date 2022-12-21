@@ -3,13 +3,13 @@
 -- initial version by s-d-a with additions and update by Blue Storm + Bearcat
 
 ExportScript.FoundDCSModule = true
-ExportScript.Version.M2000C = "2.1.0"
+ExportScript.Version.M2000C = "2.1.4"
 
 
 -----------------------------
 --     Helper functions    --
 -----------------------------
-function place_decimal(PCN_string, point_mask)
+function ExportScript.PCN_place_decimal(PCN_string, point_mask)
   local retval = ""
   if (PCN_string ~=nil) and (point_mask ~= nil) then
     if (point_mask:find("%.") ~= nil) then
@@ -110,7 +110,7 @@ ExportScript.ConfigEveryFrameArguments =
 -- div. lights
  	[373] = "%.1f",	--Afterburner light
 	[376] = "%.1f",	--starter light
-	[198] = "%.1f",	--tranfere
+	[198] = "%.1f",	--tranfer
 	[199] = "%.1f",	--master-warning
 	[200] = "%.1f",	--master-caution
 -- INSTRUMENTS -------------------------------------------
@@ -176,13 +176,13 @@ ExportScript.ConfigEveryFrameArguments =
 	[337] = "%.4f",	--Drum 0X00
 	[338] = "%.4f",	--Drum 00X0
 	[339] = "%.4f",	--Drum 000X
-  [340] = "%.4f",	--HSI Heading Selector
-  [341] = "%.1f",	--HSI Mode Selector Switch
-  [342] = "%.4f",	--Compass rose
+    [340] = "%.4f",	--HSI Heading Selector
+    [341] = "%.1f",	--HSI Mode Selector Switch
+    [342] = "%.4f",	--Compass rose
 	[344] = "%.1f",	--HSI Flag 1
 	[345] = "%.1f",	--HSI Flag 2
 	[346] = "%.1f",	--HSI Flag CAP
-	[341] = "%.1f",	--HSI Mode
+	--[341] = "%.1f",	--HSI Mode
 	[343] = "%.1f",	--DME Off Flag
 
 -- ACC indicator
@@ -225,10 +225,10 @@ ExportScript.ConfigEveryFrameArguments =
 	[381] = "%.4f",	--	00X0
 	[382] = "%.4f",	--	000X
 
-	[388] = "%.1f",	--	Rote Kontrollampe MODE-4 Panel
-	[394] = "%.1f",	--	gelbe „FAULT“ Anzeige
+	[388] = "%.1f",	--	Voyant de contrôle rouge Panneau MODE-4
+	[394] = "%.1f",	--	voyant jaune "PANNE"
 
--- Pressuge
+-- Pressure
 	[397] = "%.4f",	--Needle left
 	[398] = "%.4f",	--Needle right
 
@@ -241,17 +241,17 @@ ExportScript.ConfigEveryFrameArguments =
 	[403] = "%.4f",	--seconds
 
 -- GEARPANEL
-	[405] = "%.1f",	-- 	Gearhandle Innenleuchte, rot
+	[405] = "%.1f",	-- 	Eclairage Manette de commande train rouge
 	[410] = "%.1f",	-- 	„A“ Warnlamp
 	[411] = "%.1f",	-- 	„F“ Warnlamp
-	[412] = "%.1f",	--  „DIRA“ Warnlamp, blau
+	[412] = "%.1f",	--  „DIRAV“ Warnlamp, bleu
 	[413] = "%.1f",	-- 	„FREIN“
 	[414] = "%.1f",	-- 	„Cross“
 	[415] = "%.1f",	-- 	„SPAD“
-	[416] = "%.1f",	-- 	Rote Warnlamp unter „BIP“
-	[417] = "%.1f",	-- 	Left Gear ?, grüne Warnlampen
-	[418] = "%.1f",	-- 	Nose Gear ?
-	[419] = "%.1f",	-- 	Right Gear ?
+	[416] = "%.1f",	-- 	voyant rouge „BIP“
+	[417] = "%.1f",	-- 	Left Gear, lampe verte
+	[418] = "%.1f",	-- 	Nose Gear
+	[419] = "%.1f",	-- 	Right Gear
 
 -- CS indicator
 	[424] = "%.4f",	-- 		1. waagerechte Balkenanzeige
@@ -283,8 +283,8 @@ ExportScript.ConfigEveryFrameArguments =
 
 -- Left consule Lamps
 	[490] = "%.1f",	-- „VAL”
-	[492] = "%.1f",	-- „A“ Kontrolllampe  mittleres Panel
-	[494] = "%.1f",	-- „DEC“ Kontrollampe
+	[492] = "%.1f",	-- „A“ voyant Panneau
+	[494] = "%.1f",	-- „DEC“ Voyant
 	[496] = "%.1f",	-- „VISU“
 	[505] = "%.1f",	-- „PSIC“
 	[510] = "%.1f",	-- „ELEC“
@@ -298,7 +298,7 @@ ExportScript.ConfigEveryFrameArguments =
 	[509] = "%.1f",	--	Trim direction
 
 -- LOX
-	[518] = "%.4f",	--	needle
+	--[518] = "%.4f",	--	needle
 	--[519] = "%.4f",	--	LOX flow blinker
 
 -- WARNING PANEL
@@ -343,7 +343,7 @@ ExportScript.ConfigEveryFrameArguments =
 	[563] = "%.1f",	--  PARK.
 
 -- Lamps Right Console
-	[564] = "%.1f",	--	“PRET”  grüne Doppelanzeige, unten
+	[564] = "%.1f",	--	“PRET”  Indicateur Vert
 	[565] = "%.1f",	--	„ALN“
 	[566] = "%.1f",	--	„MIP“
 	[567] = "%.1f",	--	„N.DEG“
@@ -353,15 +353,15 @@ ExportScript.ConfigEveryFrameArguments =
 	[670] = "%.1f",	--	„M02“
 	[671] = "%.1f",	--	„M03“
 
-	[571] = "%.1f",	--	“PREP” WL, gelb
-	[573] = "%.1f",	--	“DEST” WL, gelb
-	[577] = "%.1f",	--	“BAD” WL gelb/grün
+	[571] = "%.1f",	--	“PREP” WL, jaune
+	[573] = "%.1f",	--	“DEST” WL, jaune
+	[577] = "%.1f",	--	“BAD” WL jaune/vert
 	[579] = "%.1f",	--	“REC”
 	[581] = "%.1f",	--	“VAL”
 	[583] = "%.1f",	--	“MRC”
-	[595] = "%.1f",	--	“EFF” runde Warnlampe
-	[597] = "%.1f",	--	“INS” runde WL
-	[668] = "%.1f",	--  “ENC” WL gelb/grün
+	[595] = "%.1f",	--	“EFF” bouton lampe rond jaune
+	[597] = "%.1f",	--	“INS” bouton lampe rond jaune
+	[668] = "%.1f",	--  “ENC” WL jaune/vert
 
 -- VIERER ANZEIGE
 	[601] = "%.4f",	--	1. Drum
@@ -382,17 +382,23 @@ ExportScript.ConfigEveryFrameArguments =
 	[622] = "%.4f",	--	Drum 00X right	(0;1-9;0)
 
 
-	[632] = "%.1f",	--	Taster mit Warnlampe “C”
-	[634] = "%.1f",	--	Taster mit Warnlampe “F”
+	[632] = "%.1f",	--	Bouton avec voyant "C"
+	[634] = "%.1f",	--	Bouton avec voyant "F"
+
+-- Miscelaneous Right Panel
+	[657] = "%.1f",    -- Hydraulic Emergency Pump Switch
+	[658] = "%.1f",    -- Audio Warning Switch
+	[659] = "%.1f",    -- Pitot Heat Cover
+	[660] = "%.1f",    -- Pitot Heat Switch
 
 -- Panel lights
-	[720] = "%.4f",	--	MIP Aufleuchte, red
-	[721] = "%.4f",	--	MIP Hintergrundbeleuchtung, red
-	[722] = "%.4f",	-- 	MIP Aufleuchte, weiß
-	[723] = "%.4f",	--	Linke und rechte Seitenpanels Hintergrundbeleuchtung, red
-	[724] = "%.4f",	--	Seitenpanels Aufleuchten, red (links, rechts)
-	[726] = "%.4f",	--	Warnlampen Dimmer
-	[727] = "%.4f",	--	Warnlampen Dimmer (Seitenpanels?)
+	[720] = "%.4f",	--	Flash MIP, rouge
+	[721] = "%.4f",	--	Rétroéclairage MIP, rouge
+	[722] = "%.4f",	-- 	Flash MIP, blanc
+	[723] = "%.4f",	--	Rétroéclairage des panneaux latéraux gauche et droit, rouge
+	[724] = "%.4f",	--	Eclairage des panneaux latéraux, rouge (gauche, droite)
+	[726] = "%.4f",	--	variateur de lampe d'avertissement
+	[727] = "%.4f",	--	variateur de lampe d'avertissement (panneaux latéraux)
 
 }
 
@@ -414,6 +420,8 @@ ExportScript.ConfigArguments =
 	[203] = "%.1f",	--HUD Decluter Switch
 	[204] = "%.1f",	--HUD Altimeter Selector Switch
 	[205] = "%.1f",	--Radar Altimeter Power Switch
+	[206] = "%.1f",	--Auxiliary Gunsight
+	[207] = "%.1f",	--Auxiliary Gunsight Deflection
 	[208] = "%.1f",	--Gun AG Reticle Selector
 	[209] = "%.1f",	--Gun Target Wingspan Selector
 	[210] = "%.1f",	--HUD Clear Switch
@@ -479,7 +487,7 @@ ExportScript.ConfigArguments =
 	[460] = "%.1f",	--Intake slats Operation Switch
 	[461] = "%.1f",	--Intake cones Operation Switch
 
--- PELLES, SOURIES AND BECS
+-- PELLES, SOURIS AND BECS
 	[462] = "%.1f",	--Slats Operation Switch
 	[395] = "%.1f",	--Hydraulic System Selector
 	[396] = "%.1f",	--Pedal Adjust Lever
@@ -507,7 +515,7 @@ ExportScript.ConfigArguments =
 	[602] = "%.1f",	--Radar IFF Code-3 Selector
 	[603] = "%.1f",	--Radar IFF Code-2 Selector
 	[604] = "%.1f",	--Radar IFF Code-1 Selector
-	[709] = "%.1f",	--Radar PRF Selector
+	[109] = "%.1f",	--Radar PRF Selector
 	[710] = "%.1f",	--TDC Mode
 
 -- ELECTRICAL PANEL
@@ -543,8 +551,12 @@ ExportScript.ConfigArguments =
 
 -- PSM
 	[627] = "%.1f",	--INS Mode Selector
+	[628] = "%.1f",	--MIP Data Slot
 	[629] = "%.1f",	--INS Operational Mode
 	[665] = "%.1f",	--INS Auxiliary Heading/Horizon
+	[673] = "%.1f", --DTC Cartridge Position
+	[674] = "%.1f", --DTC Cartridge Presence
+
 
 -- EW PANEL
 	[228] = "%.4f",	--RWR Light Brightnes Control
@@ -640,17 +652,16 @@ ExportScript.ConfigArguments =
 	[191] = "%.1f",	--Audio Warning Reset
 
 -- Miscelaneous Seat
-	[900] = "%.1f",	--Seat adjustment switch
 	[458] = "%.1f",	--Anti-Skid Cover
 	[459] = "%.1f",	--Anti-Skid Switch
 	[666] = "%.1f",	--Parking Brake Lever
 	[807] = "%.1f",	--Nose Wheel Steering / IFF
 
-	-- Télé Affichage TAF - GCI
+-- Télé Affichage TAF - GCI
 	[968] = "%.2f",	--EVF Channel selector
 	[970] = "%.2f",	--EVF Panel Test
 
-  -- Jumelles de Vision Nocturnes (JNV - NVG)
+-- Jumelles de Vision Nocturnes (JNV - NVG)
 	[672] = "%.1f",	--NVG lights Filter Switch
 
 
@@ -669,7 +680,7 @@ ExportScript.ConfigArguments =
 	[314] = "%.1f",	--ADI Cage Lever
 	[315] = "%.1f",	--ADI Backlight Switch
 	[325] = "%.1f",	--Backup ADI Cage
-	--[328] = "%.4f",	--Backup ADI Pitch Adjust Knob {-1.0,1.0} in 0.1 steps
+	[328] = "%.4f",	--Backup ADI Pitch Adjust Knob {-1.0,1.0} in 0.1 steps
 -- Center console IFF
 	[383] = "%.1f",	--Ident Power Switch {-1.0,0.0,1.0}
 	[384] = "%.1f",	--Mode-1 Switch
@@ -773,18 +784,19 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 	local to1, to2, from1, from2 = nil, nil, nil, nil
 	local lPCA_UR = {"", "", "", "", ""}
 	to1, to2 = lPCAUR:find("PCA_UR")
+	local lIndex, lIndex2
 	if (to1 ~= nil) then
 		for lIndex = 1, 5, 1 do
-      lIndex2 = lIndex - 1
-      from1, from2 = lPCAUR:find("PCA_LCD_1_"..lIndex2.."%c")
-			if (from2 ~= nill) then
-				to1, to2 = lPCAUR:find("%c", from2+2)
-				if (to1 ~= nil) then
-					lPCA_UR[lIndex] = lPCAUR:sub(from2+1, to1-1)
-          if (lPCA_UR[lIndex]:len() > 3) then
-            -- ExportScript.Tools.WriteToLog("cleanup UR "..string.format("%s", lPCA_UR[lIndex]))
-            lPCA_UR[lIndex] = ""
-          end
+      		lIndex2 = lIndex - 1
+      		from1, from2 = lPCAUR:find("PCA_LCD_1_"..lIndex2.."%c")
+				if (from2 ~= nil) then
+					to1, to2 = lPCAUR:find("%c", from2+2)
+					if (to1 ~= nil) then
+						lPCA_UR[lIndex] = lPCAUR:sub(from2+1, to1-1)
+          				if (lPCA_UR[lIndex]:len() > 3) then
+            				-- ExportScript.Tools.WriteToLog("cleanup UR "..string.format("%s", lPCA_UR[lIndex]))
+            				lPCA_UR[lIndex] = ""
+        			end
 				end
 			end
 		end -- for
@@ -817,7 +829,7 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 		for lIndex = 1, 5, 1 do
       lIndex2 = lIndex - 1
 			from1, from2 = lPCABR:find("PCA_LCD_2_"..lIndex2.."%c")
-			if (from2 ~= nill) then
+			if (from2 ~= nil) then
 				to1, to2 = lPCABR:find("%c", from2+2)
 				if (to1 ~= nil) then
 					lPCA_BR[lIndex] = lPCABR:sub(from2+1, to1-1)
@@ -984,10 +996,10 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
   local lPCN_main_L_D, lPCN_main_R_D = "", "" -- initialize variables that will hold the cleaned up text
   -- retrieve main digits and place the points according to the mask
   if (#lPCN_main_L ~= 0) then
-    lPCN_main_L_D = place_decimal(lPCN_main_L, lPCN_mask_L)
+    lPCN_main_L_D = ExportScript.PCN_place_decimal(lPCN_main_L, lPCN_mask_L)
   end
   if (#lPCN_main_R ~= 0) then
-    lPCN_main_R_D = place_decimal(lPCN_main_R, lPCN_mask_R)
+    lPCN_main_R_D = ExportScript.PCN_place_decimal(lPCN_main_R, lPCN_mask_R)
   end
 
 	if ExportScript.Config.Debug then
@@ -1036,7 +1048,7 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
   end
 
   local lPCNBR = ExportScript.Tools.getListIndicatorValue(10)
-
+  local lPCN_BR1, lPCN_BR2
   if lPCNBR ~= nil and lPCNBR.PCN_BL_DIGITS ~= nil then
     lPCN_BR1 = lPCNBR.PCN_BL_DIGITS
   else
@@ -1063,7 +1075,7 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 	[603] = "%.1f",	--	3.
 	[604] = "%.1f",	--	4.
 ]]
-	digits = {}
+	local digits = {}
 	digits[1] = string.format("%1.0f",mainPanelDevice:get_argument_value(601) * 10)
 	digits[2] = string.format("%1.0f",mainPanelDevice:get_argument_value(602) * 10)
 	digits[3] = string.format("%1.0f",mainPanelDevice:get_argument_value(603) * 10)
@@ -1083,20 +1095,13 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 
 -- EVF Channel post processing to get a displayable number
 --local EVF_Channels = {[0.00]=" 1", [0.05]=" 2", [0.10]=" 3", [0.15]=" 4", [0.20]=" 5", [0.25]=" 6", [0.30]=" 7", [0.35]=" 8", [0.40]=" 9", [0.45]="10", [0.50]="11", [0.55]="12", [0.60]="13", [0.65]="14", [0.70]="15", [0.75]="16", [0.80]="17", [0.85]="18", [0.90]="19", [0.95]="20"}
-  EVF_Channel = string.format("%02d", (mainPanelDevice:get_argument_value(968) * 20) + 1)
+--[[  EVF_Channel = string.format("%02d", (mainPanelDevice:get_argument_value(968) * 20) + 1)
   ExportScript.Tools.SendData(2068, EVF_Channel)
 	if ExportScript.Config.Debug then
     ExportScript.Tools.WriteToLog("2068: "..string.format("%s", EVF_Channel))
-  end
+  end ]]
 
 -- VOR ILS
---[[
-	[611] = "%.4f",	--	1. Drum
-	[612] = "%.4f",	--	2.
-	[613] = "%.4f",	--	3.
-	[614] = "%.4f",	--	4.
-	[615] = "%.4f",	--	5.
-]]
 	digits = {}
 	digits[1] = string.format("%1.0f",mainPanelDevice:get_argument_value(611) * 10)
 	digits[2] = string.format("%1.0f",mainPanelDevice:get_argument_value(612) * 10)
@@ -1137,10 +1142,13 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 	ExportScript.Tools.SendData(2040, ExportScript.Tools.DisplayFormat(string.format("%1.0f",mainPanelDevice:get_argument_value(442) * 10), 1))
 	ExportScript.Tools.SendData(2041, ExportScript.Tools.DisplayFormat(string.format("%1.0f",mainPanelDevice:get_argument_value(443) * 10), 1))
 	local lTmpNumber = tonumber(string.format("%1.0f",mainPanelDevice:get_argument_value(444) * 100))
+	local lRetVal = ""
 	if lTmpNumber == 0 then
-		lTmpNumber = "00"
+		lRetVal = "00"
+	else 
+		lRetVal = ExportScript.Tools.DisplayFormat(tostring(lTmpNumber), 2)
 	end
-	ExportScript.Tools.SendData(2042, ExportScript.Tools.DisplayFormat(tostring(lTmpNumber), 2))
+	ExportScript.Tools.SendData(2042, lRetVal)
 
 	if ExportScript.Config.Debug then
 		ExportScript.Tools.WriteToLog('2038: '..ExportScript.Tools.dump(string.format("%1.0f",mainPanelDevice:get_argument_value(440) * 10)))
@@ -1240,7 +1248,7 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
     lHSI_00X0 = string.sub(lHSI_00X0, -1)
   end
   if string.len(string.format("%1d", digits[4])) > 2 then
-    lHSI_000X = '.' .. string.sub(string.format("%1d", digits[4], -1))
+    lHSI_000X = '.' .. string.sub(string.format("%1d", digits[4]), -1)
   else
     lHSI_000X = '.' .. string.format("%1d", digits[4])
   end
@@ -1292,7 +1300,7 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
   -- mach meter and tachymeter
   local lTachy = ""
   local lMach = ""
-  lTachy = string.format("%4d", mainPanelDevice:get_argument_value(303) * 1000)
+  lTachy = string.format("%04d", mainPanelDevice:get_argument_value(303) * 1000)
   lMach = string.format("%1.2f", mainPanelDevice:get_argument_value(304) * 10)
   ExportScript.Tools.SendData(2303, lTachy)
   ExportScript.Tools.SendData(2304, lMach)
@@ -1301,9 +1309,62 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
     ExportScript.Tools.WriteToLog('2304: '..ExportScript.Tools.dump(lMach))
   end
 
+ -- Pitch angle
+  local PAngle = ""
+  PAngle = string.format("%04d", mainPanelDevice:get_argument_value(316) * 100)
+  ExportScript.Tools.SendData(2316, PAngle)
+  if ExportScript.Config.Debug then
+    ExportScript.Tools.WriteToLog('2316 '..ExportScript.Tools.dump(PAngle))
+  end
 
+  -- Jauge and DETOT
+  local lJAUGE = "0000"
+  digits = {}
+  digits[1] = math.floor(mainPanelDevice:get_argument_value(349) * 10 + 0.5)
+  digits[2] = math.floor(mainPanelDevice:get_argument_value(350) * 10 + 0.5)
+  digits[3] = math.floor(mainPanelDevice:get_argument_value(351) * 100 + 0.5)
+  lJAUGE = string.format("%01d", digits[1]) .. string.format("%01d", digits[2]) .. string.format("%02d", digits[3])
+  ExportScript.Tools.SendData(2349, lJAUGE)
+  if ExportScript.Config.Debug then
+    ExportScript.Tools.WriteToLog('2349 '..ExportScript.Tools.dump(lJAUGE))
+  end
+  local lDETOT = "0000"
+  digits = {}
+  digits[1] = math.floor(mainPanelDevice:get_argument_value(352) * 10 + 0.5)
+  digits[2] = math.floor(mainPanelDevice:get_argument_value(353) * 10 + 0.5)
+  digits[3] = math.floor(mainPanelDevice:get_argument_value(354) * 100 + 0.5)
+  lDETOT = string.format("%01d", digits[1]) .. string.format("%01d", digits[2]) .. string.format("%02d", digits[3])
+  ExportScript.Tools.SendData(2352, lDETOT)
+  if ExportScript.Config.Debug then
+    ExportScript.Tools.WriteToLog('2352 '..ExportScript.Tools.dump(lDETOT))
+  end
+
+  -- IFF Digits
+  local IFF_1 = "0"
+  local IFF_2 = "0"
+  local IFF_3 = "0"
+  local IFF_4 = "0"
+  IFF_1 = string.format("%s", mainPanelDevice:get_argument_value(601) * 10)
+  IFF_2 = string.format("%s", mainPanelDevice:get_argument_value(602) * 10)
+  IFF_3 = string.format("%s", mainPanelDevice:get_argument_value(603) * 10)
+  IFF_4 = string.format("%s", mainPanelDevice:get_argument_value(604) * 10)
+  ExportScript.Tools.SendData(2601, IFF_1)
+  ExportScript.Tools.SendData(2602, IFF_2)
+  ExportScript.Tools.SendData(2603, IFF_3)
+  ExportScript.Tools.SendData(2604, IFF_4)
+  if ExportScript.Config.Debug then
+    ExportScript.Tools.WriteToLog('2601 '..ExportScript.Tools.dump(IFF_1))
+    ExportScript.Tools.WriteToLog('2602 '..ExportScript.Tools.dump(IFF_2))
+    ExportScript.Tools.WriteToLog('2603 '..ExportScript.Tools.dump(IFF_3))
+    ExportScript.Tools.WriteToLog('2604 '..ExportScript.Tools.dump(IFF_4))
+  end
+
+  -- end cycle
   ExportScript.Tools.FlushData()
 end
+
+
+
 
 function ExportScript.ProcessDACConfigLowImportance(mainPanelDevice)
 	--[[
@@ -1362,7 +1423,7 @@ function ExportScript.ProcessDACConfigLowImportance(mainPanelDevice)
 	ExportScript.Tools.SendDataDAC(2020, string.format("%s", lCOM1))
 	ExportScript.Tools.SendDataDAC(2021, string.format("%s", lCOM2))
 
-	-- PPA (vielelicht die Bomben Anzeige unten rechts)
+	-- PPA
 	local lPPA = list_indication(6)
 	if ExportScript.Config.Debug then
 		ExportScript.Tools.WriteToLog('PPA : '..ExportScript.Tools.dump(lPPA))
