@@ -3,7 +3,7 @@
 -- initial version by s-d-a with additions and update by Blue Storm + Bearcat
 
 ExportScript.FoundDCSModule = true
-ExportScript.Version.M2000C = "2.1.4"
+ExportScript.Version.M2000C = "2.1.5"
 
 
 -----------------------------
@@ -1344,10 +1344,10 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
   local IFF_2 = "0"
   local IFF_3 = "0"
   local IFF_4 = "0"
-  IFF_1 = string.format("%s", mainPanelDevice:get_argument_value(601) * 10)
-  IFF_2 = string.format("%s", mainPanelDevice:get_argument_value(602) * 10)
-  IFF_3 = string.format("%s", mainPanelDevice:get_argument_value(603) * 10)
-  IFF_4 = string.format("%s", mainPanelDevice:get_argument_value(604) * 10)
+  IFF_1 = string.format("%d", mainPanelDevice:get_argument_value(601) * 10)
+  IFF_2 = string.format("%d", mainPanelDevice:get_argument_value(602) * 10)
+  IFF_3 = string.format("%d", mainPanelDevice:get_argument_value(603) * 10)
+  IFF_4 = string.format("%d", mainPanelDevice:get_argument_value(604) * 10)
   ExportScript.Tools.SendData(2601, IFF_1)
   ExportScript.Tools.SendData(2602, IFF_2)
   ExportScript.Tools.SendData(2603, IFF_3)
