@@ -419,8 +419,8 @@ ExportScript.ConfigArguments =
 	[942] = "%.3f",  -- ECS Mode Knob Selector, DE-SMK/NORM/OFF/RAM {0,0.333,0.666,0.999}
 	[943] = "%1d",   -- Defog Button, OUT/IN {0,1}
 	[947] = "%1d",   -- Exterior Light Master Switch, NVG/OFF/NORMAL {-1,0,1}
-	[948] = "%.1f",  -- Formation Light Knob Selector, OFF/1/2/3/4/BRT {0,0.2,0.4,0.6,0.8,1}
-	[949] = "%.1f",  -- Anti-Collision Light Knob Selector, OFF/1/2/3/4/CODE {0,0.2,0.4,0.6,0.8,1}
+	[948] = "%.2f",  -- Formation Light Knob Selector, OFF/1/2/3/4/BRT {0,0.25,0.50,0.75,1.0}
+	[949] = "%.2f",  -- Anti-Collision Light Knob Selector, OFF/1/2/3/4/CODE {0,0.25,0.50,0.75,1.0}
 	[950] = "%1d",   -- Navigation Light Switch, DIM/OFF/BRIGHT {-1,0,1}
 	[951] = "%1d",   -- Navigation Light Switch, STEADY/FLASH {-1,1}
 	[952] = "%1d",   -- Light Switch, TOW/OFF/ANTI-COLLISION {-1,0,1}
@@ -451,9 +451,82 @@ end
 
 function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 
-ExportScript.arrowExample(mainPanelDevice)
-ExportScript.RadioTile(mainPanelDevice)
+    ExportScript.arrowExample(mainPanelDevice)
+    ExportScript.RadioTile(mainPanelDevice)
 
+    -- UFCP Text Display Windows 1-4
+	local ufcp_1 = ExportScript.Tools.split(list_indication(3), "%c")[6]
+	local ufcp_2 = ExportScript.Tools.split(list_indication(4), "%c")[6]
+	local ufcp_3 = ExportScript.Tools.split(list_indication(5), "%c")[6]
+	local ufcp_4 = ExportScript.Tools.split(list_indication(6), "%c")[6]
+	local radio1 = ExportScript.Tools.split(list_indication(7), "%c")[3]
+	local radio2 = ExportScript.Tools.split(list_indication(7), "%c")[8]
+
+
+	-- Temporary fix: DCS-ExportScript uses colons (:) as separation between uplink messages.
+    -- Replace all colons with semicolons for TOT view, TODO: add escape char parsing in streamdeck plugin (ctytler).
+	ufcp_1 = ufcp_1:gsub(":",";")
+	ufcp_2 = ufcp_2:gsub(":",";")
+	ufcp_3 = ufcp_3:gsub(":",";")
+	ufcp_4 = ufcp_4:gsub(":",";")
+	radio1 = radio1:gsub(":",";")
+	radio1 = radio1:gsub(":",";")
+
+	-- The below logic handles the case where a UFCP display has been selected for entry and
+	-- has blinking "--".
+	-- Additional logic could be added to handle the blinking itself and show the other side
+	-- with the e.g. win1fill value, however this logic seemed sufficient for now.
+	if ufcp_1 == nil then
+	    ufcp_1 = ""
+	elseif list_indication(3):match("txt_win1r") then
+		ufcp_1 = string.format("%8s", ufcp_1)
+	end
+	if ufcp_2 == nil then
+	    ufcp_2 = ""
+	elseif list_indication(3):match("txt_win2r") then
+		ufcp_2 = string.format("%8s", ufcp_2)
+	end
+	if ufcp_3 == nil then
+	    ufcp_3 = ""
+	elseif list_indication(3):match("txt_win3r") then
+		ufcp_3 = string.format("%8s", ufcp_3)
+	end
+	if ufcp_4 == nil then
+	    ufcp_4 = ""
+	elseif list_indication(3):match("txt_win4r") then
+		ufcp_4 = string.format("%8s", ufcp_4)
+	end
+	if radio1 == nil then
+	    radio1 = ""
+	elseif list_indication(7):match("txt_win4r") then
+		radio1 = string.format("%8s", radio1)
+	end
+	if radio2 == nil then
+	    radio2 = ""
+	elseif list_indication(7):match("txt_win4r") then
+		radio2 = string.format("%8s", radio2)
+	end
+	-- Full 8 character strings.
+	ExportScript.Tools.SendData(2001, string.format("%-8s", ufcp_1))
+	ExportScript.Tools.SendData(2002, string.format("%-8s", ufcp_2))
+	ExportScript.Tools.SendData(2003, string.format("%-8s", ufcp_3))
+	ExportScript.Tools.SendData(2004, string.format("%-8s", ufcp_4))
+	ExportScript.Tools.SendData(2013, string.format("%-8s", radio1))
+	ExportScript.Tools.SendData(2016, string.format("%-8s", radio2))
+	-- Left-Hand 4 character strings.
+	ExportScript.Tools.SendData(2005, string.format("%-4s", ufcp_1:sub(1,4)))
+	ExportScript.Tools.SendData(2006, string.format("%-4s", ufcp_2:sub(1,4)))
+	ExportScript.Tools.SendData(2007, string.format("%-4s", ufcp_3:sub(1,4)))
+	ExportScript.Tools.SendData(2008, string.format("%-4s", ufcp_4:sub(1,4)))
+	ExportScript.Tools.SendData(2014, string.format("%-4s", radio1:sub(1,4)))
+	ExportScript.Tools.SendData(2017, string.format("%-4s", radio2:sub(1,4)))
+	-- Right Hand 4 character strings.
+	ExportScript.Tools.SendData(2009, string.format("%-4s", ufcp_1:sub(5,8)))
+	ExportScript.Tools.SendData(2010, string.format("%-4s", ufcp_2:sub(5,8)))
+	ExportScript.Tools.SendData(2011, string.format("%-4s", ufcp_3:sub(5,8)))
+	ExportScript.Tools.SendData(2012, string.format("%-4s", ufcp_4:sub(5,8)))
+	ExportScript.Tools.SendData(2015, string.format("%-4s", radio1:sub(5,8)))
+	ExportScript.Tools.SendData(2018, string.format("%-4s", radio2:sub(5,8)))
 end
 
 function ExportScript.ProcessDACConfigLowImportance(mainPanelDevice)
@@ -482,9 +555,9 @@ function ExportScript.RadioTile(mainPanelDevice)
 
 	local radio1 = (GetDevice(25):get_frequency())/1000000 --left radio freq unrounded
 	local radio2 = (GetDevice(26):get_frequency())/1000000 --right radio freq unrounded
-			
-	ExportScript.Tools.SendData(2001, radio1) --results in "108.000568" for channel 1
-	ExportScript.Tools.SendData(2002, radio2) --results in "108.500744" for channel 2
+
+	ExportScript.Tools.SendData(12001, radio1) --results in "108.000568" for channel 1
+	ExportScript.Tools.SendData(12002, radio2) --results in "108.500744" for channel 2
 end
 -----------------------
 -- General Functions --

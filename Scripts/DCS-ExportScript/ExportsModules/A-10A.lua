@@ -23,8 +23,8 @@ function ExportScript.ProcessIkarusFCHighImportanceConfig()
 
 		local lEngineRPMleft			= LoGetEngineInfo().RPM.left							-- ENG1 RPM %
 		local lEngineRPMright			= LoGetEngineInfo().RPM.right							-- ENG2 RPM %
-		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ºC
-		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ºC		
+		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ï¿½C
+		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ï¿½C		
 
 		local lIAS						= LoGetIndicatedAirSpeed()								-- INDICATED AIRSPEED (Meter/Second)
 		local lAoA						= LoGetAngleOfAttack()									-- ANGLE OF ATTACK AoA (Radian)
@@ -372,6 +372,7 @@ function ExportScript.ProcessIkarusFCLowImportanceConfig()
 	local lCounter					= {[0] = 0.0, [1] = 0.1, [2] = 0.2, [3] = 0.3, [4] = 0.4, [5] = 0.5, [6] = 0.6, [7] = 0.7, [8] = 0.8, [9] = 0.9}
 
 	lEngineFuelInternal				= lEngineFuelInternal * 2.2046223302272		-- kg to lbs
+	lEngineFuelExternal				= lEngineFuelExternal * 2.2046223302272		-- kg to lbs
 	local lFuelNeedle				= (lEngineFuelInternal / 2) / 6000			-- 6000 = scala
 	lEngineFuelInternal				= lEngineFuelInternal / 100		-- um unf die ersten drei stellen zukommen
 	local lEngineFuelInternalTmp	= string.format("%03d", lEngineFuelInternal)
@@ -388,6 +389,7 @@ function ExportScript.ProcessIkarusFCLowImportanceConfig()
 	ExportScript.Tools.SendData(302, string.format("%.2f", lFuelCounter3))
 	ExportScript.Tools.SendData(303, string.format("%.4f", lFuelNeedle))
 	ExportScript.Tools.SendData(304, string.format("%.4f", lFuelNeedle))
+	ExportScript.Tools.SendData(311, string.format("%d", lEngineFuelExternal))
 	-- Fuel Indicator end
 
 	-- Weapon Panel
@@ -489,6 +491,7 @@ function ExportScript.ProcessIkarusFCLowImportanceConfig()
     -- local lNameByType = LoGetNameByType () -- args 4 (number : level1,level2,level3,level4), result string
 	-- values from LoGetTargetInformation().type
 	-- ExportScript.Tools.WriteToLog('lNameByType: '..ExportScript.Tools.dump(lNameByType))
+	ExportScript.AF.FlareChaff()
 end
 
 function ExportScript.ProcessDACConfigLowImportance()
@@ -498,7 +501,6 @@ function ExportScript.ProcessDACConfigLowImportance()
 	ExportScript.AF.SightingSystem()
 	ExportScript.AF.FuelQuantityIndicator()
 	ExportScript.AF.StatusLamp()
-	ExportScript.AF.FlareChaff()
 	ExportScript.AF.WeaponStatusPanel()
 	ExportScript.AF.AOAIndicator()
 end
@@ -689,8 +691,8 @@ function ExportScript.AF.FlareChaff()
 	--[chaff] = number: "30"
     --[flare] = number: "30"
 
-	ExportScript.Tools.SendDataDAC("800", lSnares.chaff )
-	ExportScript.Tools.SendDataDAC("801", lSnares.flare )
+	ExportScript.Tools.SendData("800", lSnares.chaff )
+	ExportScript.Tools.SendData("801", lSnares.flare )
 end
 
 function ExportScript.AF.MechanicalDevicesIndicator(FunctionTyp)
@@ -1167,8 +1169,8 @@ function ExportScript.AF.WeaponStatusPanel()
 	ExportScript.Tools.SendDataDAC("131", (ExportScript.AF.PayloadInfo.Stations[2].count  == 0 and 1 or 0) ) -- weapon presend > 0 (panel 11)	
 	--ExportScript.Tools.SendDataDAC("CurrentStation", ExportScript.AF.PayloadInfo.CurrentStation ) 
 	-- air-to-air missils panel 1 and 11, air combat modus, CurrentStation = 1, panel 1 and 11 on
-	-- wenn die Waffenstationen gleichmässig belegt sind, hat bei Auswahl CurrentStation immer den Wert der linken Station
-	-- bei ungleichmäßiger Belegung, hat CurrentStation immer den Wert der jeweiligen Station
+	-- wenn die Waffenstationen gleichmï¿½ssig belegt sind, hat bei Auswahl CurrentStation immer den Wert der linken Station
+	-- bei ungleichmï¿½ï¿½iger Belegung, hat CurrentStation immer den Wert der jeweiligen Station
 	-- Waffenbezeichnung als UUID, ExportScript.AF.PayloadInfo.Stations[X].CLSID 
 
 	-- defination
@@ -1204,7 +1206,7 @@ function ExportScript.AF.WeaponStatusPanel()
 				--ExportScript.Tools.WriteToLog('aktiv2: '..ExportScript.AF.TmpStationToPanel[ExportScript.AF.PayloadInfo.CurrentStation].CurrentID2)
 			end
 		end
-		table.foreach(ExportScript.AF.PayloadInfo.Stations, ExportScript.AF.WeaponStatusPanel_selectCurrentPayloadStation_A10A) -- zugehörige Stationen
+		table.foreach(ExportScript.AF.PayloadInfo.Stations, ExportScript.AF.WeaponStatusPanel_selectCurrentPayloadStation_A10A) -- zugehï¿½rige Stationen
 	elseif ExportScript.AF.PayloadInfo.CurrentStation  == 0 and ExportScript.AF.CurrentStationTmp > 0 then
 		ExportScript.AF.WeaponStatusPanel_Reset(201, 211)
 		ExportScript.AF.WeaponStatusPanel_Reset(221, 231)

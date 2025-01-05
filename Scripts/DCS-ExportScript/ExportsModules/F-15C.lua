@@ -23,8 +23,8 @@ function ExportScript.ProcessIkarusFCHighImportanceConfig()
 
 		local lEngineRPMleft			= LoGetEngineInfo().RPM.left							-- ENG1 RPM %
 		local lEngineRPMright			= LoGetEngineInfo().RPM.right							-- ENG2 RPM %
-		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ºC
-		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ºC		
+		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ï¿½C
+		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ï¿½C		
 
 		local lIAS						= LoGetIndicatedAirSpeed()								-- INDICATED AIRSPEED (Meter/Second)
 		local lMachNumber				= LoGetMachNumber()										-- MACH
@@ -104,6 +104,24 @@ function ExportScript.ProcessIkarusFCHighImportanceConfig()
 		--lAltBar							= lAltBar + (9.5 * (760 - lBasicAtmospherePressure))	-- 9.5 m per 1mmHg difference
 		local lAltBarTmp				= lAltBar * 3.28084										-- meter to feeds
 		local lAltBarTmp2				= ((lAltBar * 3.28084) / 100)							-- meter to feeds
+
+
+        -- Export atmosphere pressure indicator
+        -- Because the damn ED has hidden the inHg value in the altimeter!
+        local AtmospherePressureFor_mmHg = ExportScript.Tools.round(lBasicAtmospherePressure, 2)
+        local AtmospherePressureFor_inHg = ExportScript.Tools.round(lBasicAtmospherePressure / 25.4, 2)
+        local AtmospherePressureFor_kPa  = ExportScript.Tools.round(lBasicAtmospherePressure * 1.33322, 2)
+        -- mmHg
+        ExportScript.Tools.SendData(1011, AtmospherePressureFor_mmHg)
+        ExportScript.Tools.SendData(1021, AtmospherePressureFor_mmHg..'\nmmHg')
+        -- inHg
+        ExportScript.Tools.SendData(1012, AtmospherePressureFor_inHg)
+        ExportScript.Tools.SendData(1022, AtmospherePressureFor_inHg..'\ninHg')
+        -- kPa
+        ExportScript.Tools.SendData(1013, AtmospherePressureFor_kPa)
+        ExportScript.Tools.SendData(1023, AtmospherePressureFor_kPa..'\nhPa')
+        -- Combine mmHg, inHg, kPa
+        ExportScript.Tools.SendData(1025, AtmospherePressureFor_inHg..' inHg\n'..AtmospherePressureFor_mmHg..' mmHg\n'..AtmospherePressureFor_kPa..' hPa')
 
 		lAltBarTmp = lAltBarTmp / 1000
 		lAltBarTmp = lAltBarTmp - ExportScript.Tools.round(lAltBarTmp, 0, "floor")
@@ -1274,8 +1292,8 @@ function ExportScript.AF.WeaponStatusPanel(FunctionTyp)
 
 	--ExportScript.Tools.SendDataDAC("CurrentStation", ExportScript.AF.PayloadInfo.CurrentStation ) 
 	-- air-to-air missils panel 1 and 11, air combat modus, CurrentStation = 1, panel 1 and 11 on
-	-- wenn die Waffenstationen gleichmässig belegt sind, hat bei Auswahl CurrentStation immer den Wert der linken Station
-	-- bei ungleichmäßiger Belegung, hat CurrentStation immer den Wert der jeweiligen Station
+	-- wenn die Waffenstationen gleichmï¿½ssig belegt sind, hat bei Auswahl CurrentStation immer den Wert der linken Station
+	-- bei ungleichmï¿½ï¿½iger Belegung, hat CurrentStation immer den Wert der jeweiligen Station
 	-- Waffenbezeichnung als UUID, ExportScript.AF.PayloadInfo.Stations[X].CLSID 	
 	ExportScript.Tools.SendDataDAC("100", ExportScript.AF.PayloadInfo.Cannon.shells ) -- count cannon shells
 	ExportScript.Tools.SendDataDAC("101", (ExportScript.AF.PayloadInfo.Stations[1].count  > 0 and 1 or 0) ) -- weapon presend > 0 (panel 1)
@@ -1335,7 +1353,7 @@ function ExportScript.AF.WeaponStatusPanel(FunctionTyp)
 				--ExportScript.Tools.WriteToLog('aktiv2: '..ExportScript.AF.TmpStationToPanel[ExportScript.AF.PayloadInfo.CurrentStation].CurrentID2)
 			end
 		end
-		table.foreach(ExportScript.AF.PayloadInfo.Stations, ExportScript.AF.WeaponStatusPanel_selectCurrentPayloadStation_F15C) -- zugehörige Stationen
+		table.foreach(ExportScript.AF.PayloadInfo.Stations, ExportScript.AF.WeaponStatusPanel_selectCurrentPayloadStation_F15C) -- zugehï¿½rige Stationen
 	elseif ExportScript.AF.PayloadInfo.CurrentStation  == 0 and ExportScript.AF.CurrentStationTmp > 0 then
 		ExportScript.AF.WeaponStatusPanel_Reset(201, 211)
 		ExportScript.AF.WeaponStatusPanel_Reset(221, 231)

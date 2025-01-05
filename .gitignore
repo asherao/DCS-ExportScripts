@@ -44,3 +44,6 @@ luac.out
 
 # Working Files
 # *.psd
+
+# JetBrains IDEs' workdir
+.idea

@@ -19,8 +19,8 @@ function ExportScript.ProcessIkarusFCHighImportanceConfig()
 		local lLatitude					= myData.LatLongAlt.Lat									-- LATITUDE
 		local lLongitude				= myData.LatLongAlt.Long								-- LONGITUDE
 
-		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ºC
-		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ºC
+		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ï¿½C
+		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ï¿½C
 		--[[
 		local lBasicAtmospherePressure	= LoGetBasicAtmospherePressure()						-- BAROMETRIC PRESSURE
 		local lAltBar					= LoGetAltitudeAboveSeaLevel()							-- ALTITUDE SEA LEVEL (Meter)
@@ -432,6 +432,7 @@ function ExportScript.AF.FuelQuantityIndicator(FunctionTyp)
 		end
 
 		ExportScript.Tools.SendData("301", string.format("%.4f", lTotalFuel_12_0) )
+		ExportScript.Tools.SendData("311", string.format("%d", lTotalFuel) )
 		ExportScript.Tools.SendData("304", (lEngineInfo.fuel_internal < 6900.0 and 1 or 0) ) -- Tank warning 1
 		ExportScript.Tools.SendData("305", (lEngineInfo.fuel_internal < 5400.0 and 1 or 0) ) -- Tank warning 2
 		ExportScript.Tools.SendData("306", (lEngineInfo.fuel_internal < 4700.0 and 1 or 0) ) -- Tank warning 3

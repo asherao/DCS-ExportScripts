@@ -130,6 +130,8 @@ function ExportScript.ProcessIkarusFCLowImportanceConfig()
 	--  Fuel Quantity Indicator
 	ExportScript.AF.FC_FuelQuantityIndicator(lFunctionTyp)
 
+	ExportScript.AF.FC_FlareChaff()
+
 	local lEngineInfo = LoGetEngineInfo()
 	if lEngineInfo ~= nil then
 		-- Hydraulic Pressure Left
@@ -269,6 +271,8 @@ function ExportScript.AF.FC_FlareChaff()
 
 	--[chaff] = number: "128"
     --[flare] = number: "128"
+    ExportScript.Tools.SendData(2501, lSnares.chaff)
+    ExportScript.Tools.SendData(2502, lSnares.flare)
 end
 
 function ExportScript.AF.FC_StatusLamp()
@@ -419,6 +423,7 @@ function ExportScript.AF.FC_FuelQuantityIndicator(FunctionTyp)
 
 	if ExportScript.Config.IkarusExport and lFunctionTyp == "Ikarus" then
         ExportScript.Tools.SendData(300, string.format("%0.2f", lFuelCounter[tonumber(string.sub(lTotalFuel, 1, 1))]))
+        ExportScript.Tools.SendData(312, string.format("%d", lEngineInfo.fuel_external))
         ExportScript.Tools.SendData(301, string.format("%0.2f", lFuelCounter[tonumber(string.sub(lTotalFuel, 2, 2))]))
         ExportScript.Tools.SendData(302, string.format("%0.2f", lFuelCounter[tonumber(string.sub(lTotalFuel, 3, 3))]))
         ExportScript.Tools.SendData(303, lExtTank1)                                         -- external tanks

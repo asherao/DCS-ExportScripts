@@ -21,8 +21,8 @@ function ExportScript.ProcessIkarusFCHighImportanceConfig()
 
 		local lMachNumber				= LoGetMachNumber()										-- MACH
 
-		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ºC
-		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ºC
+		local lEngineTempLeft			= LoGetEngineInfo().Temperature.left					-- ENG1 EGT ï¿½C
+		local lEngineTempRight			= LoGetEngineInfo().Temperature.right					-- ENG2 EGT ï¿½C
 		--[[
 		local lBasicAtmospherePressure	= LoGetBasicAtmospherePressure()						-- BAROMETRIC PRESSURE
 		local lAltBar					= LoGetAltitudeAboveSeaLevel()							-- ALTITUDE SEA LEVEL (Meter)
@@ -164,6 +164,8 @@ function ExportScript.ProcessIkarusFCLowImportanceConfig()
 	-- EKRAN Message
 	ExportScript.AF.FC_EKRAN()
 
+	ExportScript.AF.FlareChaff()
+
 	-- Mechanical Configuration Indicator (GearWarningLight, NoseGear, LeftGear, RightGear, Airbreaks, Flaps1, Flaps2)
 	ExportScript.AF.FC_Russian_MDI_SU25(lFunctionTyp)
 
@@ -294,6 +296,8 @@ function ExportScript.AF.FlareChaff()
 
 	--[chaff] = number: "128"
     --[flare] = number: "128"
+    ExportScript.Tools.SendData(2501, lSnares.chaff)
+    ExportScript.Tools.SendData(2502, lSnares.flare)
 end
 
 function ExportScript.AF.StatusLamp()
@@ -469,6 +473,7 @@ function ExportScript.AF.FuelQuantityIndicator(FunctionTyp)
 	if ExportScript.Config.IkarusExport and lFunctionTyp == "Ikarus" then
         ExportScript.Tools.SendData(300, string.format("%0.4f", lFuel_leftbar))
         ExportScript.Tools.SendData(301, string.format("%0.4f", lFuel_rightbar))
+        ExportScript.Tools.SendData(312, string.format("%d", lEngineInfo.fuel_external))
         ExportScript.Tools.SendData(302, lExtTank1)                                         -- external tanks
         ExportScript.Tools.SendData(303, lExtTank2)                                         -- inner tanks
         ExportScript.Tools.SendData(304, (lEngineInfo.fuel_internal < 2790.0 and 1 or 0))   -- inner wing tank

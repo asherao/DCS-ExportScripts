@@ -154,13 +154,13 @@ ExportScript.ConfigEveryFrameArguments =
 	[389] = "%.4f",	--QTY 1. Drum 
 	[390] = "%.4f",	--QTY 2.
 	--LOWER AMARMENT PANEL
-	[406] = "%.4f",	--SET FLAG 1
-	[408] = "%.4f",	--SET FLAG 2
-	[410] = "%.4f",	--SET FLAG 3
-	[412] = "%.4f",	--SET FLAG 4
-	[414] = "%.4f",	--SET FLAG 5
-	[416] = "%.4f",	--SET FLAG 6
-	[418] = "%.4f",	--SET FLAG 7
+	[406] = "%1d",	--SET FLAG 1
+	[408] = "%1d",	--SET FLAG 2
+	[410] = "%1d",	--SET FLAG 3
+	[412] = "%1d",	--SET FLAG 4
+	[414] = "%1d",	--SET FLAG 5
+	[416] = "%1d",	--SET FLAG 6
+	[418] = "%1d",	--SET FLAG 7
 	--GEAR PANEL DISPLAY --STATUS LIGHTS--
 	[462] = "%.f",	--NOSE GEAR (YELLOW)
 	[463] = "%.f",	--NOSE GEAR (GREEN)
@@ -248,14 +248,14 @@ ExportScript.ConfigArguments =
 	[284] = "%.1f",	--VSTOL Master Mode Selector
 	[280] = "%.1f",	--AG Master Mode Selector
 	-- Engine Display Panel
-	[272] = "%.4f",	--EDP Brightness Control
+	[272] = "%.2f",	--EDP Brightness Control
 	[655] = "%1d",	--EDP BIT Button
 	-- HUD Control Panel
 	[288] = "%.4f",	--HUD
 	[289] = "%.4f",	--HUD Off/Brightness Control
 	[290] = "%.1f",	--HUD Display Mode Switch
-	[291] = "%.4f",	--HUD Video Brightness Control
-	[292] = "%.4f",	--HUD Video Contrast Control
+	[291] = "%.2f",	--HUD Video Brightness Control
+	[292] = "%.2f",	--HUD Video Contrast Control
 	[293] = "%1d",	--HUD Altitude Selector Switch
 	-- UFC Panel
 	[302] = "%1d",	--UFC Button 1
@@ -285,9 +285,9 @@ ExportScript.ConfigArguments =
 	[323] = "%1d",	--Radar Beacon Function Selector
 	[297] = "%1d",	--I/P Button
 	[309] = "%1d",	--Save Data Button
-	[295] = "%1d",	--Display Brightness Control
-	[298] = "%.4f",	--Comm 1 Volume Control
-	[299] = "%.4f",	--Comm 2 Volume Control
+	[295] = "%.2f",	--Display Brightness Control
+	[298] = "%.2f",	--Comm 1 Volume Control
+	[299] = "%.2f",	--Comm 2 Volume Control
 	[300] = "%.4f",	--Comm 1 Channel Selector
 	[301] = "%.4f",	--Comm 2 Channel Selector
 	[178] = "%.4f",	--Comm 1 Channel Show Button
@@ -329,7 +329,7 @@ ExportScript.ConfigArguments =
 	[221] = "%1d",	--MPCD Left Display Symbology
 	[222] = "%1d",	--MPCD Left Display Gain
 	[223] = "%1d",	--MPCD Left Display Contrast
-	[194] = "%.4f",	--MPCD Left Off/Brightness Control
+	[194] = "%.2f",	--MPCD Left Off/Brightness Control
 	-- MPCD Right
 	[224] = "%1d",	--MPCD Right Button 1
 	[225] = "%1d",	--MPCD Right Button 2
@@ -355,7 +355,7 @@ ExportScript.ConfigArguments =
 	[245] = "%1d",	--MPCD Right Display Symbology
 	[246] = "%1d",	--MPCD Right Display Gain
 	[247] = "%1d",	--MPCD Right Display Contrast
-	[195] = "%.4f",	--MPCD Right Off/Brightness Control
+	[195] = "%.2f",	--MPCD Right Off/Brightness Control
 	-- Armament Control Panel ACP
 	[395] = "%.1f",	--Manual Release Control Knob
 	[396] = "%1d",	--Armament Mode Control
@@ -480,7 +480,7 @@ ExportScript.ConfigArguments =
 	[612] = "%.1f",	--Generator Switch
 	[613] = "%.1f",	--Battery Switch
 -- V/UHF Radio Panel
-	[614] = "%.4f",	--V/UHF RSC Volume Knob
+	[614] = "%.2f",	--V/UHF RSC Volume Knob
 	[615] = "%.3f",	--V/UHF RSC Chan/Freq Knob
 	[616] = "%.1f",	--V/UHF RSC Operational Mode Switch
 	[617] = "%1d",	--V/UHF RSC Ancillary Mode Pointer
@@ -497,18 +497,18 @@ ExportScript.ConfigArguments =
 	[627] = "%1d",	--KY-58 Codes Clear Switch
 	[628] = "%1d",	--KY-58 Remote Codes Load Switch
 -- ICS
-	[629] = "%.4f",	--ICS Aux Volume Knob
-	[630] = "%.4f",	--ICS Ground Volume Knob
+	[629] = "%.2f",	--ICS Aux Volume Knob
+	[630] = "%.2f",	--ICS Ground Volume Knob
 	[631] = "%.1f",	--ICS Mic Operational Mode Switch
 -- IFF
 	[632] = "%1d",	--IFF Operational Mode Switch
 	[633] = "%1d",	--IFF Crypto Mode Switch
 -- Interior Lights Panel
 	[634] = "%1d",	--Compass Light/Test Lights
-	[635] = "%.4f",	--Instruments Lights
-	[636] = "%.4f",	--Console Lights
-	[637] = "%.4f",	--Flood Lights
-	[638] = "%.4f",	--Annunciator Lights
+	[635] = "%.2f",	--Instruments Lights
+	[636] = "%.2f",	--Console Lights
+	[637] = "%.2f",	--Flood Lights
+	[638] = "%.2f",	--Annunciator Lights
 }
 
 -----------------------------
@@ -735,11 +735,11 @@ function ExportScript.ProcessIkarusDCSConfigLowImportance(mainPanelDevice)
 	elseif digits[1] == "2" then 
 		ExportScript.Tools.SendData(2018, "AUT")
 	elseif digits[1] == "4" then 
-		ExportScript.Tools.SendData(2018, "CP ")
+		ExportScript.Tools.SendData(2018, "CIP")
 	elseif digits[1] == "6" then 
 		ExportScript.Tools.SendData(2018, "DSL")
 	elseif digits[1] == "8" then 
-		ExportScript.Tools.SendData(2018, "DR ")
+		ExportScript.Tools.SendData(2018, "DIR ")
 	elseif digits[1] == "10" then 
 		ExportScript.Tools.SendData(2018, "AGM") 
 	end

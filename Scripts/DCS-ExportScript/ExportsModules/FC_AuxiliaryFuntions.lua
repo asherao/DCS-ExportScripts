@@ -656,6 +656,19 @@ function ExportScript.AF.FC_Russian_BarometricAltimeter_late()
 	-- BasicAtmospherePressure {947, 1080} hPa
 	-- AltBar_kilometer {0, 99} km
 
+    -- Export atmosphere pressure indicator
+    -- Because the damn ED has hidden the inHg value in the altimeter!
+    local AtmospherePressureFor_hPa   = ExportScript.Tools.round(lBasicAtmospherePressure, 2)
+    local AtmospherePressureFor_mmHg  = ExportScript.Tools.round(lBasicAtmospherePressure * 0.7501, 2)
+    -- mmHg
+    ExportScript.Tools.SendData(1012, AtmospherePressureFor_hPa)
+    ExportScript.Tools.SendData(1022, AtmospherePressureFor_hPa..'\nhPa')
+    -- kPa
+    ExportScript.Tools.SendData(1013, AtmospherePressureFor_mmHg)
+    ExportScript.Tools.SendData(1023, AtmospherePressureFor_mmHg..'\nmmHg')
+    -- Combine mmHg, kPa
+    ExportScript.Tools.SendData(1025, AtmospherePressureFor_hPa..' mbar\n'..AtmospherePressureFor_mmHg..' mmHg')
+
     ExportScript.Tools.SendData(30, string.format("%.4f", lAltBar_kilometer_needle))
     ExportScript.Tools.SendData(31, string.format("%.4f", lAltBar_meter_needle))
     ExportScript.Tools.SendData(32, string.format("%04d", ExportScript.Tools.round(lBasicAtmospherePressure, 0, "floor")))
@@ -1640,17 +1653,21 @@ end
 function ExportScript.AF.FC_Russian_FlareChaff_MiG29(FunctionTyp)
 	local lFunctionTyp = FunctionTyp or "Ikarus"
 	local lSnares = LoGetSnares() -- Flare and Chaff
-	--ExportScript.Tools.WriteToLog('lSnares: '..ExportScript.Tools.dump(lSnares))
+	-- ExportScript.Tools.WriteToLog('lSnares: '..ExportScript.Tools.dump(lSnares))
 
 	--[chaff] = number: "30"
 	--[flare] = number: "30"
 
 	if ExportScript.Config.DACExport and lFunctionTyp == "DAC" then
-		ExportScript.Tools.SendDataDAC(800, lSnares.chaff + lSnares.flare )
+		ExportScript.Tools.SendDataDAC(800, lSnares.chaff + lSnares.flare)
+		ExportScript.Tools.SendDataDAC(1801, lSnares.chaff)
+		ExportScript.Tools.SendDataDAC(1802, lSnares.flare)
 	end
 	
 	if ExportScript.Config.IkarusExport and lFunctionTyp == "Ikarus" then
-		ExportScript.Tools.SendData(800, lSnares.chaff + lSnares.flare )
+		ExportScript.Tools.SendData(800, lSnares.chaff + lSnares.flare)
+		ExportScript.Tools.SendData(1801, lSnares.chaff)
+		ExportScript.Tools.SendData(1802, lSnares.flare)
 	end
 end
 
