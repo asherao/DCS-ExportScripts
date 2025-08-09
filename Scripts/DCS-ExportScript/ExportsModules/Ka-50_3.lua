@@ -298,6 +298,13 @@ ExportScript.ConfigArguments =
     [1010] = "%0.4f", -- HMD_PrismsRotPhase
     [1015] = "%0.4f", -- lamp_MasterWarning_brightness
     [1016] = "%0.4f", -- lamp_RotorRPM_brightness
+    
+    [435] = "%0.4f", -- Laser standby ON/OFF switch
+    [400] = "%0.4f", -- Weapon mode switch - Burst Length
+    [398] = "%0.4f", -- Cannon rate of fire setting
+    [399] = "%0.4f", -- Cannon round selector switch HE/AP
+    [403] = "%0.4f", -- Manual/Auto weapon system control switch
+    [387] = "%0.4f", -- Master Arm switch
 }
 
 -----------------------------
